@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚽ Хөлбөмбөгийн Тоглоом</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #1a2a3a, #2d3b4a);
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+      user-select: none;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #4fc3f7;
+      text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+      font-size: 2.5rem;
+    }
+    #game-info {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 15px auto;
+      max-width: 900px;
+    }
+    #scoreboard {
+      font-size: 28px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    #timer {
+      font-size: 28px;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px 30px;
+      border-radius: 25px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    canvas {
+      display: block;
+      margin: 20px auto;
+      border: 8px solid #4fc3f7;
+      background-color: #2e7d32;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    }
+    #winner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40px;
+      color: #ffeb3b;
+      font-weight: bold;
+      text-shadow: 0 0 15px rgba(255, 235, 59, 0.7);
+      background: rgba(0,0,0,0.7);
+      padding: 20px 40px;
+      border-radius: 15px;
+      display: none;
+      z-index: 10;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+    #instructions {
+      position: relative;
+      color: #b0bec5;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    #restartBtn {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(to right, #4fc3f7, #2196f3);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: none;
+      box-shadow: 0 0 15px rgba(79, 195, 247, 0.7);
+      transition: all 0.3s ease;
+    }
+    #restartBtn:hover {
+      background: linear-gradient(to right, #3fb3e5, #1e88e5);
+      transform: translateX(-50%) scale(1.05);
+    }
+    .player-label {
+      position: absolute;
+      font-weight: bold;
+      font-size: 18px;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 15px;
+      border-radius: 20px;
+    }
+    #player1-label {
+      top: 80px;
+      left: 50px;
+      color: #64b5f6;
+      border: 2px solid #64b5f6;
+    }
+    #player2-label {
+      top: 80px;
+      right: 50px;
+      color: #ef5350;
+      border: 2px solid #ef5350;
+    }
+    #countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 72px;
+      color: white;
+      text-shadow: 0 0 20px rgba(255,255,255,0.8);
+      z-index: 5;
+      display: none;
+    }
+    .goal-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: rgba(255,255,255,0.7);
+      z-index: 8;
+      display: none;
+      animation: flash 0.5s;
+    }
+    @keyframes flash {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+    .particle {
+      position: absolute;
+      background-color: #ffeb3b;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 7;
+    }
+    #goal-notification {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.6);
+      padding: 15px 30px;
+      border-radius: 10px;
+      display: none;
+      z-index: 9;
+    }
+    #fun-fact {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 700px;
+      font-size: 16px;
+      color: #b0bec5;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: none;
+    }
+    .goal-star {
+      position: absolute;
+      font-size: 24px;
+      color: gold;
+      opacity: 0;
+      z-index: 6;
+      animation: star-fly 1.5s ease-out;
+    }
+    @keyframes star-fly {
+      0% { transform: scale(0); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚽ Хөлбөмбөгийн Тоглоом</h1>
+  <div id="player1-label" class="player-label">Тоглогч 1 (WASD)</div>
+  <div id="player2-label" class="player-label">Тоглогч 2 (←↑↓→)</div>
+  <div id="instructions">Түрүүлж 5 гоол оруулсан болон хугацаа дуусахад хэн их гоол оруулсан нь ялна!</div>
+  <div id="game-info">
+    <div id="scoreboard">
+      🟦 Тоглогч 1: <span id="score1">0</span> &nbsp;|&nbsp;
+      🟥 Тоглогч 2: <span id="score2">0</span>
+    </div>
+    <div id="timer">⏱️ 02:00</div>
+  </div>
+  <canvas id="gameCanvas" width="900" height="400"></canvas>
+  <div id="winner"></div>
+  <div id="countdown"></div>
+  <div id="goalEffect" class="goal-effect"></div>
+  <div id="goal-notification"></div>
+  <div id="fun-fact"></div>
+  <button id="restartBtn">Дахин тоглох</button>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const restartBtn = document.getElementById("restartBtn");
+    const winnerDisplay = document.getElementById("winner");
+    const countdownDisplay = document.getElementById("countdown");
+    const goalEffect = document.getElementById("goalEffect");
+    const timerDisplay = document.getElementById("timer");
+    const goalNotification = document.getElementById("goal-notification");
+    const funFactDisplay = document.getElementById("fun-fact");
+    // Хөлбөмбөгийн сонирхолтой баримтууд
+    const funFacts = [
+      "Хөлбөмбөг нь дэлхий дээрх хамгийн алдартай спорт юм.",
+      "Хамгийн хурдан гоолыг 2.8 секундын дотор Наваро багын тоглогч Рикардо Оливера оруулсан.",
+      "Дэлхийн аварга болсон хамгийн залуу тоглогч нь 17 настайдаа Пеле юм.",
+      "Хөлбөмбөгийн бөмбөгний жин 410-450 грамм, даралт нь 0.6-1.1 атмосфер байдаг.",
+      "Бразилын тоглогч Пеле нь албан ёсоор 1281 гоол оруулсан дэлхийн рекордтой.",
+      "Хамгийн урт тоглолт 3 цаг 30 минут үргэлжилсэн (Английн багуудын тоглолт).",
+      "Хөлбөмбөгийн дүрмийг 1863 онд Англид боловсруулсан.",
+      "Монголд хөлбөмбөг 1950-аад оны эхэн үеэс тоглож эхэлсэн.",
+      "Хамгийн өндөр хөлбөмбөгчин нь 2.08 метр өндөртэй Кристофер Самба юм.",
+      "Хамгийн олон үзэгчтэй тоглолт 199,854 хүн үзсэн (Бразил vs Уругвай, 1950)"
+    ];
+    // Тоглогчийн тохиргоо
+    const player1 = { 
+      x: 150, 
+      y: 250, 
+      size: 20, 
+      color: "#64b5f6",
+      speed: 6,
+      controls: { up: "w", down: "s", left: "a", right: "d" }
+    };
+    const player2 = { 
+      x: 650, 
+      y: 250, 
+      size: 20, 
+      color: "#ef5350",
+      speed: 6,
+      controls: { up: "ArrowUp", down: "ArrowDown", left: "ArrowLeft", right: "ArrowRight" }
+    };
+    // Бөмбөгний тохиргоо
+    const ball = { 
+      x: 450, 
+      y: 200, 
+      vx: 0, 
+      vy: 0, 
+      size: 8,
+      maxSpeed: 12,
+      friction: 0.98
+    };
+    // Тоглоомын хувьсагчид
+    let score1 = 0;
+    let score2 = 0;
+    let keys = {};
+    let gameRunning = false;
+    let lastTime = 0;
+    let deltaTime = 0;
+    let particles = [];
+    let gameStartTime = 0;
+    let gameTimeLeft = 120; // 2 минут = 120 секунд
+    let timerInterval;
+    let isGoalScored = false;
+    let maxGoals = 5; // Хожоход шаардагдах гоолын тоо
+    // Товчлуур дарах
+    document.addEventListener("keydown", (e) => {
+      keys[e.key] = true;
+      // Space ба Backspace товчлуураар дахин эхлүүлэх
+      if ((e.key === " " || e.key === "Backspace") && !gameRunning) {
+        restartGame();
+      }
+    });
+    document.addEventListener("keyup", (e) => keys[e.key] = false);
+    
+    restartBtn.addEventListener("click", restartGame);
+    // Тоглоомын талбай зурах
+    function drawField() {
+      // Ногоон талбай
+      const fieldGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      fieldGradient.addColorStop(0, "#2e7d32");
+      fieldGradient.addColorStop(1, "#1b5e20");
+      ctx.fillStyle = fieldGradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
+      // Төвийн шугам
+      ctx.strokeStyle = "#ffffff80";
+      ctx.lineWidth = 4;
+      ctx.setLineDash([20, 15]);
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2, 0);
+      ctx.lineTo(canvas.width / 2, canvas.height);
+      ctx.stroke();
+      ctx.setLineDash([]);    
+      // Төвийн тойрог
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 70, 0, Math.PI * 2);
+      ctx.stroke(); 
+      // Хаалганууд
+      ctx.fillStyle = "#ffffff80";
+      ctx.fillRect(0, canvas.height/2 - 75, 20, 150); // Зүүн хаалга
+      ctx.fillRect(canvas.width - 20, canvas.height/2 - 75, 20, 150); // Баруун хаалга
+      // Зүүн талын торгуулийн шугам
+      ctx.stroke();
+      ctx.strokeRect(780, 80, 120, 240);
+      // Баруун талын торгуулийн шугам
+      ctx.strokeRect(0, 80, 120, 240);   
+      // Хаалганд line
+      ctx.strokeStyle = "#ffffff60";
+      ctx.lineWidth = 2;     
+      // Зүүн хаалганд line
+      ctx.beginPath();
+      ctx.moveTo(20, canvas.height/2 - 75);
+      ctx.lineTo(50, canvas.height/2 - 75);
+      ctx.lineTo(50, canvas.height/2 + 75);
+      ctx.lineTo(20, canvas.height/2 + 75);
+      ctx.stroke();
+      // Баруун хаалганд line
+      ctx.beginPath();
+      ctx.moveTo(canvas.width - 20, canvas.height/2 - 75);
+      ctx.lineTo(canvas.width - 50, canvas.height/2 - 75);
+      ctx.lineTo(canvas.width - 50, canvas.height/2 + 75);
+      ctx.lineTo(canvas.width - 20, canvas.height/2 + 75);
+      ctx.stroke();
+      // Талбайн хүрээ
+      ctx.strokeStyle = "#ffffff60";
+      ctx.lineWidth = 8;
+      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      // Гоолын шугам (5 гоол хүртэл)
+      ctx.fillStyle = "#ffffff80";
+      ctx.font = "20px Arial";
+      ctx.fillText(`${maxGoals} гоол хүртэл`, canvas.width/2 - 50, 30);
+    }
+    // Тоглогч зурах
+    function drawPlayer(player) {
+      // Тоглогчийн бие
+      const gradient = ctx.createRadialGradient(
+        player.x - player.size/3, 
+        player.y - player.size/3, 
+        player.size/4, 
+        player.x, 
+        player.y, 
+        player.size
+      );
+      gradient.addColorStop(0, player.color);
+      gradient.addColorStop(1, darkenColor(player.color, 20));
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+      ctx.fill();
+      // Тоглогчийн гадаргуугийн гэрэлтэлт
+      ctx.fillStyle = "#ffffff90";
+      ctx.beginPath();
+      ctx.arc(
+        player.x - player.size/3, 
+        player.y - player.size/3, 
+        player.size/4, 
+        0, 
+        Math.PI * 2
+      );
+      ctx.fill();
+      // Тоглогчийн хүрээ
+      ctx.strokeStyle = "#00000030";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    // Өнгө харуулах
+    function darkenColor(color, percent) {
+      const num = parseInt(color.replace("#", ""), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) - amt;
+      const G = (num >> 8 & 0x00FF) - amt;
+      const B = (num & 0x0000FF) - amt;
+      return "#" + (
+        0x1000000 +
+        (R < 0 ? 0 : R) * 0x10000 +
+        (G < 0 ? 0 : G) * 0x100 +
+        (B < 0 ? 0 : B)
+      ).toString(16).slice(1);
+    }
+    // Бөмбөг зурах
+    function drawBall() {
+      // Бөмбөгний үндсэн хэсэг
+      const gradient = ctx.createRadialGradient(
+        ball.x - ball.size/3, 
+        ball.y - ball.size/3, 
+        0, 
+        ball.x, 
+        ball.y, 
+        ball.size
+      );
+      gradient.addColorStop(0, "#ffffff");
+      gradient.addColorStop(0.7, "#e0e0e0");
+      gradient.addColorStop(1, "#bdbdbd");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+      ctx.fill();   
+      // Бөмбөгний хээ
+      ctx.strokeStyle = "#00000020";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.size - 2, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.moveTo(ball.x - ball.size, ball.y);
+      ctx.lineTo(ball.x + ball.size, ball.y);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.moveTo(ball.x, ball.y - ball.size);
+      ctx.lineTo(ball.x, ball.y + ball.size);
+      ctx.stroke(); 
+      // Бөмбөгний гэрэл
+      if (ball.vx !== 0 || ball.vy !== 0) {
+        const speed = Math.min(1, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy) / ball.maxSpeed);
+        ctx.fillStyle = `rgba(255, 255, 255, ${speed * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.size * (1 + speed * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    // Тоглогчдын байрлал шинэчлэх
+    function updatePlayers() {
+      // Тоглогч 1
+      if (keys[player1.controls.up]) player1.y -= player1.speed;
+      if (keys[player1.controls.down]) player1.y += player1.speed;
+      if (keys[player1.controls.left]) player1.x -= player1.speed;
+      if (keys[player1.controls.right]) player1.x += player1.speed;
+      // Тоглогч 2
+      if (keys[player2.controls.up]) player2.y -= player2.speed;
+      if (keys[player2.controls.down]) player2.y += player2.speed;
+      if (keys[player2.controls.left]) player2.x -= player2.speed;
+      if (keys[player2.controls.right]) player2.x += player2.speed;
+      // Хананд мөргөхөөс сэргийлэх
+      [player1, player2].forEach(p => {
+        p.x = Math.max(p.size, Math.min(canvas.width - p.size, p.x));
+        p.y = Math.max(p.size, Math.min(canvas.height - p.size, p.y));
+      });
+    }
+    // Бөмбөг шинэчлэх
+    function updateBall() {
+      if (isGoalScored) return; // Хэрэв аль хэдийн гоол орсон бол цааш үргэлжлэхгүй
+      // Хурдны үрэлтийн эффект
+      ball.vx *= ball.friction;
+      ball.vy *= ball.friction;    
+      // Хэрэв хурд маш бага бол зогсоох
+      if (Math.abs(ball.vx) < 0.1) ball.vx = 0;
+      if (Math.abs(ball.vy) < 0.1) ball.vy = 0;    
+      // Бөмбөгний хөдөлгөөн
+      ball.x += ball.vx * deltaTime;
+      ball.y += ball.vy * deltaTime;
+      // Хананд мөргөх (дээд ба доод)
+      if (ball.y < ball.size || ball.y > canvas.height - ball.size) {
+        ball.vy *= -0.9; // Энерги алдагдах
+        ball.y = Math.max(ball.size, Math.min(canvas.height - ball.size, ball.y));
+        createParticles(ball.x, ball.y, 5, "#ffffff");
+      }
+      // Хаалганд орохгүй байх (зүүн ба баруун)
+      if (ball.x < ball.size) {
+        // Хаалганд оровол гоол
+        if (ball.y > canvas.height/2 - 75 && ball.y < canvas.height/2 + 75) {
+          score2++;
+          document.getElementById("score2").textContent = score2;
+          showGoalEffect();
+          showGoalNotification("Тоглогч 2 гоол орууллаа!", "#ef5350");
+          createParticles(ball.x, ball.y, 30, "#ef5350");
+          createGoalStars(10, "#ef5350");
+          isGoalScored = true;
+          showRandomFunFact();
+          setTimeout(() => {
+            resetBall();
+            isGoalScored = false; // Дахин оноо авах боломжтой болгоно
+            checkWinCondition();
+          }, 1000);
+          return;
+        }
+        // Хаалган дээр мөргөвөл буцдаг
+        ball.vx *= -0.8;
+        ball.x = ball.size;
+        createParticles(ball.x, ball.y, 5, "#ffffff");
+      }   
+      if (ball.x > canvas.width - ball.size) {
+        // Хаалганд оровол гоол
+        if (ball.y > canvas.height/2 - 75 && ball.y < canvas.height/2 + 75) {
+          score1++;
+          document.getElementById("score1").textContent = score1;
+          showGoalEffect();
+          showGoalNotification("Тоглогч 1 гоол орууллаа!", "#64b5f6");
+          createParticles(ball.x, ball.y, 30, "#64b5f6");
+          createGoalStars(10, "#64b5f6");
+          isGoalScored = true;
+          showRandomFunFact();
+          setTimeout(() => {
+            resetBall();
+            isGoalScored = false; // Дахин оноо авах боломжтой болгоно
+            checkWinCondition();
+          }, 1000);
+          return;
+        }
+        // Хаалган дээр мөргөвөл буцдаг
+        ball.vx *= -0.8;
+        ball.x = canvas.width - ball.size;
+        createParticles(ball.x, ball.y, 5, "#ffffff");
+      }
+      // Тоглогчтой мөргөлдөх
+      [player1, player2].forEach(p => {
+        const dx = ball.x - p.x;
+        const dy = ball.y - p.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < p.size + ball.size) {
+          // Мөргөлдөөний өнцөг
+          const angle = Math.atan2(dy, dx);        
+          // Тоглогч хөдөлж байгаа чиглэлээр хурд нэмэгдэнэ
+          let playerSpeedX = 0;
+          let playerSpeedY = 0;   
+          if (p === player1) {
+            if (keys[player1.controls.left]) playerSpeedX = -2;
+            if (keys[player1.controls.right]) playerSpeedX = 2;
+            if (keys[player1.controls.up]) playerSpeedY = -2;
+            if (keys[player1.controls.down]) playerSpeedY = 2;
+          } else {
+            if (keys[player2.controls.left]) playerSpeedX = -2;
+            if (keys[player2.controls.right]) playerSpeedX = 2;
+            if (keys[player2.controls.up]) playerSpeedY = -2;
+            if (keys[player2.controls.down]) playerSpeedY = 2;
+          }       
+          // Бөмбөгний хурд
+          const power = 7 + Math.sqrt(playerSpeedX*playerSpeedX + playerSpeedY*playerSpeedY);
+          ball.vx = Math.cos(angle) * power + playerSpeedX;
+          ball.vy = Math.sin(angle) * power + playerSpeedY;       
+          // Хурд хэт их болгохгүй
+          const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+          if (speed > ball.maxSpeed) {
+            ball.vx = (ball.vx / speed) * ball.maxSpeed;
+            ball.vy = (ball.vy / speed) * ball.maxSpeed;
+          }       
+          // Бөмбөг тоглогчоос тусгаарлах
+          const overlap = (p.size + ball.size) - distance;
+          ball.x += Math.cos(angle) * overlap * 0.5;
+          ball.y += Math.sin(angle) * overlap * 0.5;         
+          // Мөргөлдөөний үед particle үүсгэх
+          createParticles(ball.x, ball.y, 10, p.color);
+        }
+      });
+    }
+    // Гоолын мэдэгдэл харуулах
+    function showGoalNotification(text, color) {
+      goalNotification.textContent = text;
+      goalNotification.style.color = color;
+      goalNotification.style.display = "block";
+      goalNotification.style.animation = "none";
+      void goalNotification.offsetWidth; // Trigger reflow
+      goalNotification.style.animation = "pulse 0.5s 3";
+      
+      setTimeout(() => {
+        goalNotification.style.display = "none";
+      }, 2000);
+    }
+    // Гоолын од үүсгэх
+    function createGoalStars(count, color) {
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement("div");
+        star.className = "goal-star";
+        star.innerHTML = "★";
+        star.style.color = color;
+        star.style.left = `${ball.x}px`;
+        star.style.top = `${ball.y}px`;       
+        // Санамсаргүй чиглэлд нисэх
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 50 + Math.random() * 100;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;       
+        star.style.setProperty("--tx", `${tx}px`);
+        star.style.setProperty("--ty", `${ty}px`);      
+        document.body.appendChild(star);      
+        // Анимац дууссаны дараа устгах
+        setTimeout(() => {
+          star.remove();
+        }, 1500);
+      }
+    }
+    // Сонирхолтой баримт харуулах
+    function showRandomFunFact() {
+      const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
+      funFactDisplay.textContent = `💡 Хөлбөмбөгийн баримт: ${fact}`;
+      funFactDisplay.style.display = "block";
+      
+      setTimeout(() => {
+        funFactDisplay.style.display = "none";
+      }, 5000);
+    }
+    // Бөмбөгний байрлал дахин тохируулах
+    function resetBall() {
+      if (!gameRunning) return;
+      
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2;
+      ball.vx = 0;
+      ball.vy = 0;    
+      // 3 секундын тоолуур
+      countdownDisplay.style.display = "block";
+      let count = 3;
+      countdownDisplay.textContent = count;    
+      const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countdownDisplay.textContent = count;
+        } else {
+          countdownDisplay.textContent = "ЭХЭЛНЭ!";
+          setTimeout(() => {
+            countdownDisplay.style.display = "none";
+            ball.vx = (Math.random() > 0.5 ? 5 : -5);
+            ball.vy = (Math.random() - 0.5) * 4;
+          }, 500);
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+    // Хожигдлын нөхцөл шалгах
+    function checkWinCondition() {
+      if (score1 >= maxGoals || score2 >= maxGoals) {
+        endGame();
+      }
+    }
+    // Гоолын үед гялалзсан эффект
+    function showGoalEffect() {
+      goalEffect.style.display = "block";
+      setTimeout(() => {
+        goalEffect.style.display = "none";
+      }, 100);
+    }
+    // Хугацааны дэвжээг шинэчлэх
+    function updateTimer() {
+      const minutes = Math.floor(gameTimeLeft / 60);
+      const seconds = gameTimeLeft % 60;
+      timerDisplay.textContent = `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      if (gameTimeLeft <= 0) {
+        endGame();
+      } else {
+        gameTimeLeft--;
+      }
+    }
+    // Тоглоом дуусах
+    function endGame() {
+      gameRunning = false;
+      clearInterval(timerInterval);
+      
+      if (score1 > score2) {
+        winnerDisplay.textContent = `🎉 Тоглогч 1 ХОЖЛОО! (${score1}-${score2}) 🎉`;
+        createParticles(canvas.width/2, canvas.height/2, 100, "#64b5f6");
+      } else if (score2 > score1) {
+        winnerDisplay.textContent = `🎉 Тоглогч 2 ХОЖЛОО! (${score1}-${score2}) 🎉`;
+        createParticles(canvas.width/2, canvas.height/2, 100, "#ef5350");
+      } else {
+        winnerDisplay.textContent = "🤝 Тэнцлээ! 🤝";
+        createParticles(canvas.width/2, canvas.height/2, 100, "#ffffff");
+      }
+      
+      winnerDisplay.style.display = "block";
+      restartBtn.style.display = "block";
+    }
+    // Particle үүсгэх
+    function createParticles(x, y, count, color) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          size: Math.random() * 5 + 2,
+          color: color,
+          vx: Math.random() * 6 - 3,
+          vy: Math.random() * 6 - 3,
+          life: 30 + Math.random() * 20
+        });
+      }
+    }
+    // Particle шинэчлэх
+    function updateParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        p.vy += 0.1; // Таталцлын эффект
+        
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+    }
+    // Particle зурах
+    function drawParticles() {
+      particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life / 50;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+    // Тоглоом дахин эхлүүлэх
+    function restartGame() {
+      score1 = 0;
+      score2 = 0;
+      document.getElementById("score1").textContent = "0";
+      document.getElementById("score2").textContent = "0";
+      winnerDisplay.style.display = "none";
+      restartBtn.style.display = "none";
+      particles = [];
+      gameTimeLeft = 120;
+      
+      player1.x = 150;
+      player1.y = 250;
+      player2.x = 650;
+      player2.y = 250;
+      
+      gameRunning = true;
+      gameStartTime = performance.now();   
+      // Хугацааны дэвжээг эхлүүлэх
+      clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
+      updateTimer();
+      
+      resetBall();
+      
+      if (!lastTime) {
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+      }
+    }
+    // Тоглоомын гол давталт
+    function gameLoop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      deltaTime = (timestamp - lastTime) / 16; // 60fps-д зориулсан normalize
+      lastTime = timestamp;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawField();
+      
+      if (gameRunning) {
+        updatePlayers();
+        updateBall();
+      }     
+      updateParticles();
+      drawPlayer(player1);
+      drawPlayer(player2);
+      drawBall();
+      drawParticles();
+      
+      requestAnimationFrame(gameLoop);
+    }   
+    // Тоглоом эхлүүлэх
+    restartGame();
+  </script>
+</body>
+</html>
