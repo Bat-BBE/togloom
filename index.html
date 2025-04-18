@@ -3,58 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BBE Тоглоомын Сан</title>
     <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-color: #000000;
+            --hover-color: #0d47a1;
+        }
+        
         body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            padding: 0;
+            margin: 0;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        header {
             text-align: center;
-            padding: 50px;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        
         h1 {
-            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
-        a {
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .intro {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+            color: #ffffffeb;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 20px;
+        }
+        
+        .game-card {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .game-card:hover {
+            background-color: yellow;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .game-link {
             display: block;
-            margin: 10px 0;
             text-decoration: none;
-            color: #007BFF;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            transition: color 0.2s;
         }
-        a:hover {
+        
+        .game-link:hover {
+            color: var(--hover-color);
             text-decoration: underline;
         }
-        div {
-            margin: 20px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        
+        .game-desc {
+            color: #666;
+            font-size: 0.95rem;
+            margin-top: 10px;
         }
-        @media (max-width: 600px) {
-            body {
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .intro {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            
+            .game-card {
                 padding: 20px;
             }
-            div {
-                margin: 10px;
-                padding: 10px;
-            }
         }
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 24px;
-            }
-            a {
-                font-size: 18px;
-            }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        
+        .game-card {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
-    <h1>Welcome to Togloom</h1>
-    <div><a href="game1.html"> Game-1 </a></div>
-    <div><a href="game2.html"> Game-2 </a></div>
-    <div><a href="game3.html"> Game-3 </a></div>
+    <header>
+        <div class="container">
+            <h1>BBE Тоглоомын Сан</h1>
+            <p class="intro">Тавтай морилно уу! Намайг BBE гэж дуудаж болно. Энд байгаа тоглоомуудаар цагийг зугаатай өнгөрүүлээрэй!</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h2>Тоглоомын жагсаалт</h2>
+        
+        <div class="game-grid">
+            <div class="game-card">
+                <a href="https://bat-bbe.github.io/lab9/" class="game-link">HANGMAN GAME</a>
+                <p class="game-desc">Үг таах сонгодог тоглоом. Алдартай Hangman тоглоомын онлайн хувилбар.</p>
+            </div>
+            
+            <div class="game-card">
+                <a href="https://bat-bbe.github.io/biy_daalt/" class="game-link">HORSE GAME</a>
+                <p class="game-desc">Морь сонгож, бооцоо тавьж, уралдаанд оролцох зугаатай тоглоом.</p>
+            </div>
+            
+            <div class="game-card">
+                <a href="game1.html" class="game-link">BREAKOUT GAME</a>
+                <p class="game-desc">Тоосго устгах сонгодог тоглоом. Бөмбөг барих самбараа удирдаж, бүх тоосгыг устга!</p>
+            </div>
+            
+            <div class="game-card">
+                <a href="game2.html" class="game-link">FOOTBALL GAME</a>
+                <p class="game-desc">Найзтайгаа хамт хөлбөмбөг тоглох боломжтой хоёр тоглогчийн тоглоом.</p>
+            </div>
+            
+            <div class="game-card">
+                <a href="game3.html" class="game-link">ТУСГАЙ ТОГЛООМ</a>
+                <p class="game-desc">Уг тоглоомыг хийж байгаа тул удахгүй танилцуулах болно.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 BBE Тоглоомын Сан. Бүх эрх хуулиар хамгаалагдсан. Хуулбарлахыг хориглоно!!!</p>
+    </footer>
 </body>
 </html>
