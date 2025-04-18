@@ -242,15 +242,15 @@
     // Тоглогчийн тохиргоо
     const player1 = { 
       x: 150, 
-      y: 250, 
+      y: 750, 
       size: 20, 
       color: "#64b5f6",
       speed: 6,
       controls: { up: "w", down: "s", left: "a", right: "d" }
     };
     const player2 = { 
-      x: 650, 
-      y: 250, 
+      x: 750, 
+      y: 150, 
       size: 20, 
       color: "#ef5350",
       speed: 6,
@@ -279,6 +279,7 @@
     let timerInterval;
     let isGoalScored = false;
     let maxGoals = 5; // Хожоход шаардагдах гоолын тоо
+    let isPuased = false; // Тоглоом зогссон эсэх
     // Товчлуур дарах
     document.addEventListener("keydown", (e) => {
       keys[e.key] = true;
@@ -442,6 +443,7 @@
     }
     // Тоглогчдын байрлал шинэчлэх
     function updatePlayers() {
+      if(isPuased) return; // Тоглоом зогссон бол шинэчлэхгүй
       // Тоглогч 1
       if (keys[player1.controls.up]) player1.y -= player1.speed;
       if (keys[player1.controls.down]) player1.y += player1.speed;
@@ -618,7 +620,14 @@
       ball.x = canvas.width / 2;
       ball.y = canvas.height / 2;
       ball.vx = 0;
-      ball.vy = 0;    
+      ball.vy = 0;
+
+      player1.x = 150;
+      player1.y = 200;
+      player2.x = 750;
+      player2.y = 200;
+      
+      isPuased = true; // Тоглоом зогссон
       // 3 секундын тоолуур
       countdownDisplay.style.display = "block";
       let count = 3;
@@ -633,6 +642,7 @@
             countdownDisplay.style.display = "none";
             ball.vx = (Math.random() > 0.5 ? 5 : -5);
             ball.vy = (Math.random() - 0.5) * 4;
+            isPuased = false; // Тоглоом дахин эхэлсэн
           }, 500);
           clearInterval(countdownInterval);
         }
@@ -733,9 +743,11 @@
       gameTimeLeft = 120;
       
       player1.x = 150;
-      player1.y = 250;
-      player2.x = 650;
-      player2.y = 250;
+      player1.y = 200;
+      player2.x = 750;
+      player2.y = 200;
+
+      ball.maxSpeed += 0.5; // Бөмбөгний хурдыг нэмэгдүүлэх
       
       gameRunning = true;
       gameStartTime = performance.now();   
