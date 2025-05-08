@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐎 Морины Адал Явдал</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary: #ff5e5e;
+      --secondary: #4dabf7;
+      --accent: #ffd166;
+      --dark: #2c1508;
+      --light: #fff9f0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%), url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      background-blend-mode: multiply;
+      font-family: "Comfortaa", cursive;
+      padding: 2rem;
+      text-align: center;
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      color: var(--accent);
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      animation: fadeInDown 1s;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 20px;
+      display: inline-block;
+      border: 3px solid var(--accent);
+    }
+
+    .user-info {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 15px;
+      font-size: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .user-info div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .quiz-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 1s;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .horse-animation {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4rem;
+      animation: gallop 2s infinite;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    @keyframes gallop {
+      0% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-20px); }
+      100% { transform: translateX(-50%) translateY(0); }
+    }
+
+    .question-info {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .question {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .options {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .option {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 1.5rem;
+      border-radius: 15px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: var(--light);
+    }
+
+    .option:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.3);
+      border-color: var(--accent);
+    }
+
+    .option:active {
+      transform: scale(0.95);
+    }
+
+    .option.correct {
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      color: var(--light);
+      transform: scale(1.05);
+      animation: correctGlow 0.5s ease-in-out;
+    }
+
+    .option.incorrect {
+      background: linear-gradient(90deg, #f44336, #e57373);
+      color: var(--light);
+      transform: scale(0.95);
+      animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes correctGlow {
+      0% { box-shadow: 0 0 10px #4CAF50; }
+      50% { box-shadow: 0 0 20px #4CAF50; }
+      100% { box-shadow: 0 0 10px #4CAF50; }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
+      100% { transform: translateX(0); }
+    }
+
+    .progress-container {
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      color: var(--light);
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      transition: width 0.8s ease;
+      border-radius: 5px;
+    }
+
+    .timer {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-top: 1.5rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .button-container {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .back-button, .restart-button {
+      padding: 1.2rem 2.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: var(--light);
+      border-radius: 15px;
+      text-decoration: none;
+      font-size: 1.4rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-button:hover, .restart-button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .achievement-badge {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 100;
+      transform: translateX(150%);
+      transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .achievement-badge.show {
+      transform: translateX(0);
+    }
+
+    .achievement-icon {
+      font-size: 1.8rem;
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: var(--accent);
+      opacity: 0;
+      z-index: 99;
+      animation: confetti-fall 3s ease-in-out forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+        padding: 0.8rem;
+      }
+
+      .user-info {
+        flex-direction: column;
+        gap: 1rem;
+        font-size: 1.2rem;
+        padding: 1rem;
+      }
+
+      .quiz-container {
+        padding: 1.5rem;
+      }
+
+      .question {
+        font-size: 1.5rem;
+      }
+
+      .option {
+        font-size: 1.2rem;
+        padding: 1rem;
+      }
+
+      .timer {
+        font-size: 1.2rem;
+      }
+
+      .horse-animation {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="animate__animated animate__fadeInDown">🐎 Морины Тухай Баримт</h1>
+
+  <div class="user-info animate__animated animate__fadeIn">
+    <div><span class="emoji">🌟</span> Оноо: <span id="score">0</span></div>
+    <div><span class="emoji">❤️</span> Амь: <span id="lives">3</span></div>
+    <div><span class="emoji">🏆</span> Түвшин: <span id="level">1</span></div>
+  </div>
+
+  <div class="quiz-container animate__animated animate__fadeIn">
+    <div class="horse-animation">🐎</div>
+    <div class="question-info" id="question-info">Асуулт 1 / 15</div>
+    <div class="question" id="question">Асуулт энд гарна...</div>
+    <div class="options" id="options"></div>
+    <div class="timer" id="timer">Хугацаа: 15 секунд</div>
+    <div class="progress-container">
+      <div class="progress-text">
+        <span>Дуусгасан</span>
+        <span id="progress-text">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <a href="game3.html" class="back-button animate__animated animate__fadeIn">Буцах</a>
+    <button class="restart-button animate__animated animate__fadeIn" id="restart-button">Дахин эхлэх</button>
+  </div>
+
+  <div class="achievement-badge" id="achievement-badge">
+    <span class="achievement-icon">🎉</span>
+    <span class="achievement-text">Шинэ амжилт!</span>
+  </div>
+
+  <script>
+    let userData = JSON.parse(localStorage.getItem('mongolGameUser')) || {
+      score: 0,
+      lives: 3,
+      level: 1,
+      progress: { horse: 0, onisogo: 0, zuirug: 0, uv_soul: 0, naadam: 0, zui: 0 },
+      levels: { horse: 1, onisogo: 1, zuirug: 1, uv_soul: 1, naadam: 1, zui: 1 },
+      unlocked: ['horse'],
+      achievements: []
+    };
+    const questions = [
+      {
+        question: "Монголын уламжлалт морин уралдаанд хэдэн насны морьд уралддаг вэ?",
+        options: ["6 нас", "7 нас", "8 нас", "9 нас"],
+        correct: "6 нас"
+      },
+      {
+        question: "Монгол морьдын хамгийн алдартай удам угшил юу вэ?",
+        options: ["Халх морь", "Дархан морь", "Галшар морь", "Тахь"],
+        correct: "Галшар морь"
+      },
+      {
+        question: "Ямар насны уралдаан хамгийн аз хиймортой вэ?",
+        options: ["Азарга", "Их нас", "Соёолон", "Даага"],
+        correct: "Соёолон"
+      },
+      {
+        question: "Хэдэн наснаас дээш эхэлж хүүхэд наадамд морь унаж уралддаг вэ?",
+        options: ["5 нас", "6 нас", "7 нас", "8 нас"],
+        correct: "8 нас"
+      },
+      {
+        question: "Монголын уламжлалт морины эмээл ямар онцлогтой вэ?",
+        options: ["Хөнгөн, жижиг", "Том, хүнд", "Металлаар хийгдсэн", "Зөөлөн даавуун"],
+        correct: "Хөнгөн, жижиг"
+      },
+      {
+        question: "Морин уралдааны хамгийн хол зай хэдэн километр байдаг вэ?",
+        options: ["10км", "20 км", "35 км", "25 км"],
+        correct: "25 км"
+      },
+      {
+        question: "Монголд морины тухай ямар домог алдартай вэ?",
+        options: ["Гурван маралын домог", "Хурдан хүлгийн домог", "Тэнгэрийн морины домог", "Уулын морины домог"],
+        correct: "Тэнгэрийн морины домог"
+      },
+      {
+        question: "Монголын хурдан морины уралдааны гол зорилго юу вэ?",
+        options: ["Хурдны сорил", "Тэсвэрийн сорил", "Ур чадварын сорил", "Гоо зүйн сорил"],
+        correct: "Тэсвэрийн сорил"
+      },
+      {
+        question: "Морь уралдсаны дараа ямар уламжлалт зүйл хийдэг вэ?",
+        options: ["Морины цол дуудах", "Моринд баяр хүргэх", "Морины эмээлийг солих", "Морины зураг авах"],
+        correct: "Морины цол дуудах"
+      },
+      {
+        question: "Морин уралдаанд ямар амьтны нэрээр цол өгдөг вэ?",
+        options: ["Бар", "Чоно", "Бүргэд", "Тахь"],
+        correct: "Бүргэд"
+      },
+      {
+        question: "Морины эмээлийг ямар материал голчлон ашигладаг вэ?",
+        options: ["Мод, арьс", "Металл, даавуу", "Хуванцар, арьс", "Ган, даавуу"],
+        correct: "Мод, арьс"
+      },
+      {
+        question: "Монголын морины уралдааны хүүхэд нар ямар хувцас өмсдөг вэ?",
+        options: ["Дээл", "Малгай, хантааз", "Хүрэм, гутал", "Бүтэн хувцас"],
+        correct: "Малгай, хантааз"
+      },
+      {
+        question: "Хурдан морьдыг юу гэж дууддаг вэ?",
+        options: ["Хүлэг", "Тахь", "Адуу", "Морин"],
+        correct: "Хүлэг"
+      },
+      {
+        question: "Морьдынхоо туурайг хамгаалахын тулд юу хэрэглэдэг вэ?",
+        options: ["Арьсан гутал", "Төмөр тах", "Даавуун боолт", "Модон хавчаар"],
+        correct: "Төмөр тах"
+      },
+      {
+        question: "Монголчуудын морь уралдуулах уламжлал аль үеэс эхэлсэн гэж үздэг вэ?",
+        options: ["Хүннүгийн үе", "Уйгурын үе", "Хар хотын үе", "Хубилай хааны үе"],
+        correct: "Хүннүгийн үе"
+      },
+      {
+        question: "Монгол адуу ямар онцлогтой вэ?",
+        options: ["Өндөр биетэй", "Тэсвэртэй, хүчтэй", "Өнгөлөг үстэй", "Сайн номхон"],
+        correct: "Тэсвэртэй, хүчтэй"
+      },
+      {
+        question: "Монгол адуу жилийн хэдэн сард хамгийн их тарга авдаг вэ?",
+        options: ["4 сар", "5 сар", "8 сар", "9 сар"],
+        correct: "8 сар"
+      },
+      {
+        question: "Соёолон гэж ямар настай адуу вэ?",
+        options: ["3 настай", "4 настай", "5 настай", "6 настай"],
+        correct: "5 настай"
+      },
+      {
+        question: "Монгол адууны сүүл ямар бэлгэдэлтэй байдаг вэ?",
+        options: ["Ухаалаг байдал", "Тэнгэрийн хүч", "Тэсвэр тэвчээр", "Эрэлхэг зориг"],
+        correct: "Тэсвэр тэвчээр"
+      },
+      {
+        question: "Морины уралдааны өмнө ямар зүйл уншиж ерөөдөг вэ?",
+        options: ["Эрийн сайн домог", "Тал нутгийн домог", "Хүлгийн ерөөл", "Бор морьны домог"],
+        correct: "Хүлгийн ерөөл"
+      },
+      {
+        question: "Хурдан морь уядаг хүнийг хэрхэн нэрлэдэг вэ?",
+        options: ["Уяач", "Хөтлөгч", "Сойгч", "Наслагч"],
+        correct: "Уяач"
+      },
+      {
+        question: "Монголын хамгийн том уралдаан юу вэ?",
+        options: ["Улсын баяр наадам", "Их хурд", "Ойн наадам", "Бүсийн наадам"],
+        correct: "Их хурд"
+      },
+      {
+        question: "Монгол адууны өвөг дээдэс юу вэ?",
+        options: ["Хулан", "Илжиг", "Тахь", "Эрлийз адуу"],
+        correct: "Тахь"
+      },
+      {
+        question: "Монгол адууны хамгийн хурдан морь юу вэ?",
+        options: ["Азарга", "Их нас", "Соёолон", "Даага"],
+        correct: "Азарга"
+      },
+      {
+        question: "Гүүний саамаар хийсэн цагаан идээ юу вэ?",
+        options: ["Тараг", "Сүү", "Айраг", "Бяслаг"],
+        correct: "Айраг"
+      },
+      {
+        question: "2 настай адууг юу гэдэг вэ? ",
+        options: ["Даага", "Соёолон", "Их нас", "Азарга"],
+        correct: "Даага"
+      },
+      {
+        question: "Морины хүзүүн дээрх үсийг юу гэдэг вэ?",
+        options: ["Үс", "Зогдор", "Хурдны үс", "Дэл"],
+        correct: "Дэл"
+      }
+    ];
+
+    let shuffledQuestions = shuffleArray([...questions]);
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let totalAnswers = 0;
+    let timerInterval;
+    let timeLeft = 15;
+    const achievementBadge = document.getElementById('achievement-badge');
+
+    document.getElementById('score').textContent = userData.score;
+    document.getElementById('lives').textContent = userData.lives;
+    document.getElementById('level').textContent = userData.levels.horse;
+    updateProgressBar();
+    loadQuestion();
+    startTimer();
+    showWelcomeMessage();
+
+    function showWelcomeMessage() {
+      const achievementText = document.querySelector('.achievement-text');
+      achievementText.textContent = 'Морины Адал Явдалд тавтай морил! Aдууны тухай мэдлэгээ сориорой!';
+      achievementBadge.classList.add('show');
+      setTimeout(() => {
+        achievementBadge.classList.remove('show');
+      }, 2000);
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.width = `${Math.random() * 10 + 5}px`;
+        confetti.style.height = `${Math.random() * 10 + 5}px`;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        document.body.appendChild(confetti);
+        setTimeout(() => {
+          confetti.remove();
+        }, 2000);
+      }
+    }
+
+    function showAchievement(message) {
+      const achievementText = document.querySelector('.achievement-text');
+      achievementText.textContent = message;
+      achievementBadge.classList.add('show');
+      createConfetti();
+      setTimeout(() => {
+        achievementBadge.classList.remove('show');
+      }, 2000);
+      if (!userData.achievements.includes(message)) {
+        userData.achievements.push(message);
+        localStorage.setItem('mongolGameUser', JSON.stringify(userData));
+      }
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function loadQuestion() {
+      if (currentQuestionIndex >= shuffledQuestions.length) {
+        endGame();
+        return;
+      }
+      const currentQuestion = shuffledQuestions[currentQuestionIndex];
+      document.getElementById('question').textContent = currentQuestion.question;
+      document.getElementById('question-info').textContent = `Асуулт ${currentQuestionIndex + 1} / ${shuffledQuestions.length}`;
+
+      const optionsContainer = document.getElementById('options');
+      optionsContainer.innerHTML = '';
+      currentQuestion.options.forEach(option => {
+        const optionElement = document.createElement('div');
+        optionElement.classList.add('option');
+        optionElement.textContent = option;
+        optionElement.onclick = () => checkAnswer(option, optionElement);
+        optionsContainer.appendChild(optionElement);
+      });
+      resetTimer();
+    }
+
+    function startTimer() {
+      timeLeft = 15;
+      document.getElementById('timer').textContent = `Хугацаа: ${timeLeft} секунд`;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = `Хугацаа: ${timeLeft} секунд`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          checkAnswer(null, null);
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      timeLeft = 15;
+      document.getElementById('timer').textContent = `Хугацаа: ${timeLeft} секунд`;
+      clearInterval(timerInterval);
+      startTimer();
+    }
+
+    function checkAnswer(selected, element) {
+      clearInterval(timerInterval);
+      const currentQuestion = shuffledQuestions[currentQuestionIndex];
+      totalAnswers++;
+
+      const timeBonus = Math.max(timeLeft, 0);
+      const baseScore = 1;
+      const bonusScore = Math.floor(timeBonus/3);
+      const totalScore = baseScore + bonusScore;
+
+      if (selected === currentQuestion.correct) {
+        correctAnswers++;
+        userData.score += totalScore;
+        const timeBon = Math.min(Math.floor((timeLeft / 15)*5), 5);
+        userData.progress.horse = Math.min((userData.progress.horse  + timeBon), 100);
+        const newLevel = Math.floor(userData.progress.horse / 20) + 1;
+        if (newLevel > userData.levels.horse) {
+          userData.levels.horse = newLevel;
+          userData.level = Math.max(...Object.values(userData.levels));
+          showAchievement(`Түвшин ${newLevel} руу дэвшлээ! 👏`);
+          if (userData.progress.horse >= 100) {
+            showAchievement('🎉 Морины Адал Явдлыг бүрэн дуусгалаа! 👏');
+            endGame();
+          }
+        }
+        if (element) element.classList.add('correct');
+      } else {
+        userData.lives = Math.max(userData.lives - 1, 0);
+        showAchievement(selected ? '🤦‍♂️ Буруу хариулт!' : '😕 Хугацаа дууслаа!');
+        if (element) element.classList.add('incorrect');
+        if (userData.lives === 0) {
+          showAchievement('😢 Амь дууслаа! Тоглоом дууслаа.');
+          endGame();
+          return;
+        }
+      }
+
+      document.getElementById('score').textContent = userData.score;
+      document.getElementById('lives').textContent = userData.lives;
+      document.getElementById('level').textContent = userData.levels.horse;
+      updateProgressBar();
+      localStorage.setItem('mongolGameUser', JSON.stringify(userData));
+      document.querySelectorAll('.option').forEach(opt => opt.onclick = null);
+      setTimeout(() => {
+        currentQuestionIndex++;
+        loadQuestion();
+      }, 2000);
+    }
+
+    function updateProgressBar() {
+      const fill = document.getElementById('progress-fill');
+      const text = document.getElementById('progress-text');
+      const val = userData.progress.horse;
+      fill.style.width = `${val}%`;
+      text.textContent = `${val}%`;
+      if (val >= 100) {
+        fill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+      }
+    }
+
+    function endGame() {
+      clearInterval(timerInterval);
+      showAchievement(`🎮 Тоглоом дууслаа! Таны оноо: ${userData.score}, Зөв хариулт: ${correctAnswers}/${totalAnswers}`);
+      document.getElementById('question').textContent = 'Тоглоом дууслаа!';
+      document.getElementById('options').innerHTML = '';
+      document.getElementById('timer').style.display = 'none';
+      document.getElementById('question-info').style.display = 'none';
+      document.getElementById('lives').textContent = userData.lives;
+    }
+    document.getElementById('restart-button').onclick = () => {
+      shuffledQuestions = shuffleArray([...questions]);
+      currentQuestionIndex = 0;
+      correctAnswers = 0;
+      totalAnswers = 0;
+      userData.lives = 3;
+      userData.progress.horse = 0;
+      userData.score = 0;
+      userData.levels.horse = 1;
+      document.getElementById('lives').textContent = userData.lives;
+      document.getElementById('level').textContent = userData.levels.horse;
+      document.getElementById('score').textContent = userData.score;
+      document.getElementById('progress-text').textContent = '0%';
+      document.getElementById('progress-fill').style.width = '0%';
+      document.getElementById('timer').style.display = 'block';
+      document.getElementById('question-info').style.display = 'block';
+      loadQuestion();
+      startTimer();
+    };
+  </script>
+</body>
+</html>

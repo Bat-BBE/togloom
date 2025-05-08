@@ -1,19 +1,569 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Монголын Хүүхдийн Тоглоом</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary: #ff5e5e;
+      --secondary: #4dabf7;
+      --accent: #ffd166;
+      --dark: #2c1508;
+      --light: #fff9f0;
+    }
+    body {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%), url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      background-blend-mode: multiply;
+      font-family: "Comfortaa", cursive;
+      padding: 2rem;
+      text-align: center;
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: var(--accent);
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      animation: fadeInDown 1s;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 20px;
+      display: inline-block;
+      border: 3px solid var(--accent);
+    }
+    .game-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      padding: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-size: 1.4rem;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--accent);
+    }
+    .game-card:active {
+      transform: scale(0.98);
+    }
+    .emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    .game-card:hover .emoji {
+      transform: scale(1.2);
+    }
+    .progress-container {
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      color: var(--light);
+    }
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      transition: width 0.8s ease;
+      border-radius: 5px;
+    }
+    .level-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--accent);
+      color: var(--dark);
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .locked {
+      position: relative;
+      filter: grayscale(0.7);
+    }
+    .locked::after {
+      content: "🔒";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      opacity: 0.7;
+      z-index: 2;
+    }
+    .locked .emoji {
+      filter: grayscale(1) brightness(0.7);
+    }
+    .tooltip {
+      visibility: hidden;
+      background: var(--dark);
+      color: var(--light);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      width: 200px;
+      text-align: center;
+      z-index: 10;
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--dark) transparent transparent transparent;
+    }
+    .game-card:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+      bottom: calc(100% + 15px);
+    }
+    .achievement-badge {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 100;
+      transform: translateX(150%);
+      transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .achievement-badge.show {
+      transform: translateX(0);
+    }
+    .achievement-icon {
+      font-size: 1.8rem;
+    }
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background-color: var(--accent);
+      opacity: 0;
+      z-index: 99;
+      animation: confetti-fall 3s ease-in-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    .achievement-info {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      margin: 2rem auto;
+      max-width: 800px;
+      color: var(--light);
+      text-align: left;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--accent);
+      animation: fadeIn 1s ease-in;
+    }
+    .achievement-info h2 {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .achievement-info p {
+      font-size: 1.3rem;
+      margin: 0.8rem 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .achievement-info p span {
+      font-weight: bold;
+      color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+        padding: 0.8rem;
+      }
+      .game-list {
+        grid-template-columns: 1fr;
+      }
+      .game-card {
+        padding: 1.5rem;
+        min-height: 200px;
+      }
+      .emoji {
+        font-size: 3rem;
+      }
+      .achievement-info {
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+      }
+      .achievement-info h2 {
+        font-size: 1.6rem;
+      }
+      .achievement-info p {
+        font-size: 1rem;
+      }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
 </head>
 <body>
-    <div class="game-container">
-        <canvas>
-            <h2>Game Canvas</h2>
-            <p>This is where the game will be rendered.</p>
-            <button onclick="startGame()">Start Game</button>
-            <button onclick="goBack()">Go Back</button>
-            <button onclick="endGame()">End Game</button>
-        </canvas>
+  <h1 class="animate__animated animate__fadeInDown">🌟👱‍♂️ Асуулт Хариулт 👱‍♀️🧠</h1>
+
+  <div class="achievement-info animate__animated animate__fadeIn">
+    <h2>🏆 Таны Амжилтын Мэдээлэл 🌞</h2>
+    <div id="achievement-details">
+      <p>🐱‍💻 Хамгийн их ахиц гаргасан тоглоом: <span id="top-progress-game">-</span></p>
+      <p>🥇 Хамгийн дээд гүйцэтгэл: <span id="top-progress">0%</span></p>
+      <p>🐱‍🏍 Нээгдсэн тоглоомын тоо: <span id="unlocked-games">1</span></p>
+      <p>🙌 Хамгийн сүүлд нээгдсэн: <span id="last-unlocked">-</span></p>
     </div>
+  </div>
+
+  <div class="game-list">
+    <div class="game-card pulse" id="horse-card">
+      <span class="emoji float">🐎</span>
+      Морины тухай асуултууд
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="horse-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="horse-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="horse-level">1</span></div>
+      <div class="tooltip">🐴 Морины тухай мэдлэгээ сориод асуултанд хариулаарай!</div>
+    </div>
+    <div class="game-card locked" id="onisogo-card">
+      <span class="emoji">🧠</span>
+      Оньсого таагаарай
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="onisogo-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="onisogo-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="onisogo-level">1</span></div>
+      <div class="tooltip">😱 Монголын уламжлал оньсого таан сэтгэхүйгээ хөгжүүлье!</div>
+    </div>
+
+    <div class="game-card locked" id="zuirug-card">
+      <span class="emoji">💬</span>
+      Зүйр Үгс
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="zuirug-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="zuirug-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="zuirug-level">1</span></div>
+      <div class="tooltip">Монгол орны сургаал, зүйр цэцэн үгсийг суралцан тоглоё!</div>
+    </div>
+
+    <div class="game-card locked" id="uv-soul-card">
+      <span class="emoji">🏺</span>
+      Өв Соёл
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="uv-soul-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="uv-soul-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="uv-soul-level">1</span></div>
+      <div class="tooltip">Монголын түүх, соёлын гайхамшгийг судлаарай!</div>
+    </div>
+
+    <div class="game-card locked" id="naadam-card">
+      <span class="emoji">🎯</span>
+      Наадам
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="naadam-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="naadam-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="naadam-level">1</span></div>
+      <div class="tooltip">Наадмын гурван тоглолтод оролцож үзээрэй!</div>
+    </div>
+
+    <div class="game-card locked" id="zui-card">
+      <span class="emoji">😂</span>
+      Хөгжилтэй
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Дуусгасан</span>
+          <span id="zui-progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="zui-progress"></div>
+        </div>
+      </div>
+      <div class="level-badge">Түвшин <span id="zui-level">1</span></div>
+      <div class="tooltip">Хөгжилтэй асуултуудаар Монголын тухай мэдлэгээ сориорой!</div>
+    </div>
+  </div>
+
+  <div class="achievement-badge" id="achievement">
+    <span class="achievement-icon"></span>
+    <span class="achievement-text">Шинэ амжилт!</span>
+  </div>
+
+  <script>
+    let userData = JSON.parse(localStorage.getItem('mongolGameUser')) || {
+      progress: {
+        horse: 0,
+        onisogo: 0,
+        zuirug: 0,
+        uv_soul: 0,
+        naadam: 0,
+        zui: 0
+      },
+      levels: {
+        horse: 1,
+        onisogo: 1,
+        zuirug: 1,
+        uv_soul: 1,
+        naadam: 1,
+        zui: 1
+      },
+      unlocked: ['horse'],
+      achievements: []
+    };
+    const achievementBadge = document.getElementById('achievement');
+
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.width = `${Math.random() * 10 + 5}px`;
+        confetti.style.height = `${Math.random() * 10 + 5}px`;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        document.body.appendChild(confetti);
+        setTimeout(() => {
+          confetti.remove();
+        }, 3000);
+      }
+    }
+    function showAchievement(message) {
+      const achievementText = document.querySelector('.achievement-text');
+      achievementText.textContent = message;
+      achievementBadge.classList.add('show');
+      createConfetti();
+      setTimeout(() => {
+        achievementBadge.classList.remove('show');
+      }, 3000);
+      if (!userData.achievements.includes(message)) {
+        userData.achievements.push(message);
+        localStorage.setItem('mongolGameUser', JSON.stringify(userData));
+        updateAchievementInfo();
+      }
+    }
+    function updateProgressBars() {
+      for (const game in userData.progress) {
+        const fill = document.getElementById(`${game}-progress`);
+        const text = document.getElementById(`${game}-progress-text`);
+        const levelText = document.getElementById(`${game}-level`);
+
+        if (fill && text && levelText) {
+          const progress = userData.progress[game];
+          fill.style.width = `${progress}%`;
+          text.textContent = `${progress}%`;
+          levelText.textContent = userData.levels[game];
+          if (progress >= 100) {
+            fill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+          }
+        }
+      }
+    }
+    function unlockGame(game) {
+      if (!userData.unlocked.includes(game)) {
+        userData.unlocked.push(game);
+        let gameName = getGameName(game);
+        showAchievement(`"${gameName}" нээгдлээ!`);
+        localStorage.setItem('mongolGameUser', JSON.stringify(userData));
+        updateGameAccess();
+        updateAchievementInfo();
+      }
+    }
+    function checkUnlockConditions() {
+      if (userData.progress.horse >= 90 && !userData.unlocked.includes('onisogo')) {
+        unlockGame('onisogo');
+      }
+      if (userData.progress.onisogo >= 90 && !userData.unlocked.includes('zuirug')) {
+        unlockGame('zuirug');
+      }
+      if (userData.progress.zuirug >= 90 && !userData.unlocked.includes('uv_soul')) {
+        unlockGame('uv_soul');
+      }
+      if (userData.progress.uv_soul >= 90 && !userData.unlocked.includes('naadam')) {
+        unlockGame('naadam');
+      }
+      if (userData.progress.naadam >= 90 && !userData.unlocked.includes('zui')) {
+        unlockGame('zui');
+      }
+    }
+    function updateGameAccess() {
+      userData.unlocked.forEach(game => {
+        const card = document.getElementById(`${game}-card`);
+        checkUnlockConditions();
+        if (card) {
+          card.classList.remove('locked');
+          card.onclick = () => {
+            startGame(game);
+          };
+        }
+      });
+
+      ['onisogo', 'zuirug', 'uv_soul', 'naadam', 'zui'].forEach(game => {
+        const card = document.getElementById(`${game}-card`);
+        if (!userData.unlocked.includes(game) && card) {
+          card.onclick = () => {
+            let requiredGame = getGameName(
+              game === 'onisogo' ? 'horse' :
+              game === 'zuirug' ? 'onisogo' :
+              game === 'uv_soul' ? 'zuirug' :
+              game === 'naadam' ? 'uv_soul' : 'naadam'
+            );
+            showAchievement(`🔒 -> 🔓🔑 "${requiredGame}" тоглоомыг 90% дуусгаад "${getGameName(game)}"-ыг нээгээрэй!`);
+          };
+        }
+      });
+    }
+    function getGameName(game) {
+      switch(game) {
+        case 'horse': return 'Морины Тухай';
+        case 'onisogo': return 'Оньсого Таах';
+        case 'zuirug': return 'Зүйр Үгс';
+        case 'uv_soul': return 'Өв Соёл';
+        case 'naadam': return 'Наадам';
+        case 'zui': return 'Хөгжилтэй Асуулт';
+        default: return game;
+      }
+    }
+    function startGame(game) {
+      window.location.href = `${game}.html`;
+    }
+    function updateAchievementInfo() {
+      let topGame = '';
+      let topProgress = 0;
+      let lastUnlocked = userData.unlocked.length > 0 ? getGameName(userData.unlocked[userData.unlocked.length - 1]) : '-';
+
+      for (const game in userData.progress) {
+        if (userData.progress[game] > topProgress) {
+          topProgress = userData.progress[game];
+          topGame = getGameName(game);
+        }
+      }
+      document.getElementById('top-progress-game').textContent = topGame || '-';
+      document.getElementById('top-progress').textContent = `${topProgress}%`;
+      document.getElementById('unlocked-games').textContent = userData.unlocked.length;
+      document.getElementById('last-unlocked').textContent = lastUnlocked;
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      updateProgressBars();
+      updateGameAccess();
+      updateAchievementInfo();
+    });
+  </script>
 </body>
 </html>

@@ -3,211 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBE Тоглоомын Сан</title>
+    <title>BBE Хүүхдийн Тоглоомын Сан</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #166088;
-            --accent-color: #4fc3f7;
-            --background-color: #f8f9fa;
-            --card-color: #ffffff;
-            --text-color: #000000;
-            --hover-color: #0d47a1;
+            --primary-color: #FF6B6B; /* Playful coral */
+            --secondary-color: #4ECDC4; /* Mint green */
+            --accent-color: #FFE66D; /* Sunny yellow */
+            --background-color: #F7FFF7; /* Very light green */
+            --card-color: #FFFFFF;
+            --text-color: #292F36; /* Dark gray */
+            --hover-color: #FF9F1C; /* Orange */
+            --header-color: #b47a0f; /* Purple */
         }
-        
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: var(--background-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            padding: 0;
-            margin: 0;
-            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 214, 171, 0.3) 0%, rgba(255, 241, 242, 0.3) 90%);
         }
-        
+
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 40px 20px;
         }
-        
+
         header {
+            background: linear-gradient(135deg, var(--header-color), #9C89B8);
+            color: white;
             text-align: center;
-            margin-bottom: 40px;
-            padding: 20px 0;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 60px 20px;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="20" cy="20" r="3" fill="white" fill-opacity="0.3"/><circle cx="50" cy="50" r="4" fill="white" fill-opacity="0.3"/><circle cx="80" cy="30" r="2" fill="white" fill-opacity="0.3"/><circle cx="30" cy="70" r="3" fill="white" fill-opacity="0.3"/><circle cx="70" cy="80" r="2" fill="white" fill-opacity="0.3"/></svg>');
+            opacity: 0.3;
+        }
+
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            font-family: 'Comic Neue', cursive;
         }
-        
-        h2 {
-            font-size: 1.8rem;
-            color: var(--secondary-color);
-            margin-top: 30px;
-            margin-bottom: 20px;
-        }
-        
+
         .intro {
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            padding: 0 20px;
-            color: #ffffffeb;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #F7FFF7;
+            position: relative;
         }
-        
+
+        h2 {
+            font-size: 2rem;
+            color: var(--header-color);
+            margin: 40px 0 20px;
+            text-align: center;
+            font-family: 'Comic Neue', cursive;
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 20px auto 40px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .search-bar::before {
+            content: "🔍";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .search-bar input:focus {
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+            border-color: var(--primary-color);
+        }
+
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 0 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 20px;
         }
-        
+
         .game-card {
             background-color: var(--card-color);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--accent-color);
         }
-        
+
+        .game-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
         .game-card:hover {
-            background-color: yellow;
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
         }
-        
+
+        .game-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background-color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 3px solid var(--accent-color);
+        }
+
+        .game-image::after {
+            content: "ТОГЛОХ";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .game-card:hover .game-image::after {
+            transform: translateY(0);
+        }
+
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover .game-image img {
+            transform: scale(1.1);
+        }
+
+        .game-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
         .game-link {
-            display: block;
             text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            color: var(--header-color);
+            font-weight: 700;
+            font-size: 1.3rem;
             transition: color 0.2s;
+            margin-bottom: 10px;
+            font-family: 'Comic Neue', cursive;
         }
-        
+
         .game-link:hover {
-            color: var(--hover-color);
+            color: var(--primary-color);
             text-decoration: underline;
         }
-        
+
         .game-desc {
-            color: #666;
+            color: #6b7280;
             font-size: 0.95rem;
-            margin-top: 10px;
+            margin-top: auto;
         }
-        
+
+        .age-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
         footer {
             text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: #777;
+            padding: 30px;
+            color: #6b7280;
             font-size: 0.9rem;
+            background-color: var(--card-color);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 50px;
+            position: relative;
         }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem;
-            }
-            
-            .game-grid {
-                grid-template-columns: 1fr;
-            }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
         }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px 10px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .intro {
-                font-size: 1rem;
-                padding: 0 10px;
-            }
-            
-            .game-card {
-                padding: 20px;
-            }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .game-card {
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeInUp 0.6s ease forwards;
             opacity: 0;
         }
-        
+
         .game-card:nth-child(1) { animation-delay: 0.1s; }
         .game-card:nth-child(2) { animation-delay: 0.2s; }
         .game-card:nth-child(3) { animation-delay: 0.3s; }
         .game-card:nth-child(4) { animation-delay: 0.4s; }
         .game-card:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Virtual game elements */
+        .virtual-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Loading state */
+        .loading {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Confetti effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            .game-grid { grid-template-columns: 1fr; }
+            header { padding: 40px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 20px 10px; }
+            h1 { font-size: 1.8rem; }
+            .intro { font-size: 1rem; }
+            .game-card { padding: 15px; }
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>BBE Тоглоомын Сан</h1>
-            <p class="intro">Тавтай морилно уу! Намайг BBE гэж дуудаж болно. Энд байгаа тоглоомуудаар цагийг зугаатай өнгөрүүлээрэй!</p>
+            <h1>BBE Хүүхдийн Тоглоомын Сан</h1>
+            <p class="intro">Хөгжилтэй цагийг өнгөрүүлэх виртуал тоглоомуудын газарт тавтай морил!</p>
         </div>
     </header>
-    
     <div class="container">
-        <h2>Тоглоомын жагсаалт</h2>
-        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Тоглоом хайх...">
+        </div>
+        <h2>Тоглоомын Жагсаалт</h2>
         <div class="game-grid">
             <div class="game-card">
-                <a href="https://bat-bbe.github.io/lab9/" class="game-link">HANGMAN GAME</a>
-                <p class="game-desc">Үг таах сонгодог тоглоом. Алдартай Hangman тоглоомын онлайн хувилбар.</p>
+                <div class="virtual-badge">Виртуал</div>
+                <div class="age-badge">5+ нас</div>
+                <div class="game-image">
+                    <img src="hangman.png" alt="Hangman Game" loading="lazy">
+                </div>
+                <div class="game-content">
+                    <a href="https://bat-bbe.github.io/lab9/" class="game-link">HANGMAN GAME</a>
+                    <p class="game-desc">Үг таах сонгодог тоглоом. Алдартай Hangman тоглоомын онлайн хувилбар.</p>
+                </div>
             </div>
-            
             <div class="game-card">
-                <a href="https://bat-bbe.github.io/biy_daalt/" class="game-link">HORSE GAME</a>
-                <p class="game-desc">Морь сонгож, бооцоо тавьж, уралдаанд оролцох зугаатай тоглоом.</p>
+                <div class="virtual-badge">Виртуал</div>
+                <div class="age-badge">16+ нас</div>
+                <div class="game-image">
+                    <img src="horse.png" alt="Horse Game" loading="lazy">
+                </div>
+                <div class="game-content">
+                    <a href="https://bat-bbe.github.io/biy_daalt/" class="game-link">HORSE GAME</a>
+                    <p class="game-desc">Морь сонгож, бооцоо тавьж, уралдаанд оролцох зугаатай тоглоом.</p>
+                </div>
             </div>
-            
             <div class="game-card">
-                <a href="game1.html" class="game-link">BREAKOUT GAME</a>
-                <p class="game-desc">Тоосго устгах сонгодог тоглоом. Бөмбөг барих самбараа удирдаж, бүх тоосгыг устга!</p>
+                <div class="virtual-badge">Виртуал</div>
+                <div class="age-badge">4+ нас</div>
+                <div class="game-image">
+                    <img src="breakout.png" alt="Breakout Game" loading="lazy">
+                </div>
+                <div class="game-content">
+                    <a href="game1.html" class="game-link">BREAKOUT GAME</a>
+                    <p class="game-desc">Тоосго устгах сонгодог тоглоом. Бөмбөг барих самбараа удирдаж, бүх тоосгыг устга!</p>
+                </div>
             </div>
-            
             <div class="game-card">
-                <a href="game2.html" class="game-link">FOOTBALL GAME</a>
-                <p class="game-desc">Найзтайгаа хамт хөлбөмбөг тоглох боломжтой хоёр тоглогчийн тоглоом.</p>
+                <div class="virtual-badge">Виртуал</div>
+                <div class="age-badge">4+ нас</div>
+                <div class="game-image">
+                    <img src="football.png" alt="Football Game" loading="lazy">
+                </div>
+                <div class="game-content">
+                    <a href="game2.html" class="game-link">FOOTBALL GAME</a>
+                    <p class="game-desc">Найзтайгаа хамт хөлбөмбөг тоглох боломжтой хоёр тоглогчийн тоглоом.</p>
+                </div>
             </div>
-            
             <div class="game-card">
-                <a href="game3.html" class="game-link">ТУСГАЙ ТОГЛООМ</a>
-                <p class="game-desc">Уг тоглоомыг хийж байгаа тул удахгүй танилцуулах болно.</p>
+                <div class="virtual-badge">Виртуал</div>
+                <div class="age-badge">6+ нас</div>
+                <div class="game-image">
+                    <img src="quiz.png" alt="Quiz Game" loading="lazy">
+                </div>
+                <div class="game-content">
+                    <a href="game3.html" class="game-link">АСУУЛТ ХАРИУЛТ</a>
+                    <p class="game-desc">Монгол орны тухай сонирхолтой асуултанд хариулж өв соёлоо судлах тоглоом.</p>
+                    <p class="game-desc">(Энэ тоглоом сайжруулт хийгдэж байгаа)</p>
+                </div>
             </div>
         </div>
     </div>
-    
     <footer>
-        <p>© 2025 BBE Тоглоомын Сан. Бүх эрх хуулиар хамгаалагдсан. Хуулбарлахыг хориглоно!!!</p>
+        <p>© 2025 BBE Хүүхдийн Тоглоомын Сан. Бүх эрх хуулиар хамгаалагдсан.</p>
     </footer>
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                let value = $(this).val().toLowerCase();
+                $('.game-card').each(function() {
+                    const cardText = $(this).text().toLowerCase();
+                    $(this).toggle(cardText.indexOf(value) > -1);
+                });
+            });
+
+            // Image error handling
+            $('.game-image img').on('error', function() {
+                const gameName = $(this).closest('.game-card').find('.game-link').text();
+                $(this).closest('.game-image').html(
+                    `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e0e7ff;color:${getRandomColor()};font-weight:bold;font-family:'Comic Neue',cursive;font-size:1.2rem;">
+                        ${gameName}
+                    </div>`
+                );
+            });
+
+            function getRandomColor() {
+                const colors = ['#FF6B6B', '#4ECDC4', '#6B5B95', '#FFE66D', '#FF9F1C'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            // Add hover effects
+            $('.game-card').hover(
+                function() {
+                    // Mouse enter
+                    $(this).find('.game-image img').css('transform', 'scale(1.1)');
+                },
+                function() {
+                    // Mouse leave
+                    $(this).find('.game-image img').css('transform', 'scale(1)');
+                }
+            );
+
+            // Create some confetti on header click
+            $('header').on('click', function(e) {
+                for (let i = 0; i < 20; i++) {
+                    createConfetti(e.pageX, e.pageY);
+                }
+            });
+
+            function createConfetti(x, y) {
+                const confetti = $('<div class="confetti"></div>');
+                const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#6B5B95', '#FF9F1C'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.css({
+                    'background-color': color,
+                    'left': x + 'px',
+                    'top': y + 'px',
+                    'transform': 'rotate(' + Math.random() * 360 + 'deg)',
+                    'border-radius': Math.random() > 0.5 ? '50%' : '0'
+                });
+                
+                $('body').append(confetti);
+                
+                confetti.animate({
+                    top: y + Math.random() * 200 - 100,
+                    left: x + Math.random() * 200 - 100,
+                    opacity: 1
+                }, 100, function() {
+                    confetti.animate({
+                        top: y + 500,
+                        opacity: 0
+                    }, 1000, function() {
+                        confetti.remove();
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
