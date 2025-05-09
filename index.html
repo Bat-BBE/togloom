@@ -14,7 +14,7 @@
             --card-color: #FFFFFF;
             --text-color: #292F36; /* Dark gray */
             --hover-color: #FF9F1C; /* Orange */
-            --header-color: #b47a0f; /* Purple */
+            --header-color: #09034b; /* Purple */
         }
 
         * {
@@ -28,7 +28,11 @@
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-image: radial-gradient(circle at 10% 20%, rgba(255, 214, 171, 0.3) 0%, rgba(255, 241, 242, 0.3) 90%);
+            background-image: url("image1.gif");
+            background-size: cover;         /* Ensures the image covers the whole screen */
+            background-repeat: no-repeat;   /* Prevents repeating */
+            background-position: center;    /* Centers the image */
+            background-attachment: fixed;  
         }
 
         .container {
@@ -38,8 +42,8 @@
         }
 
         header {
-            background: linear-gradient(135deg, var(--header-color), #9C89B8);
-            color: white;
+            background: linear-gradient(135deg, var(--header-color), #2a272e);
+            color: rgb(255, 204, 0);
             text-align: center;
             padding: 60px 20px;
             border-radius: 0 0 30px 30px;
@@ -72,22 +76,26 @@
             font-size: 1.2rem;
             max-width: 700px;
             margin: 0 auto;
-            color: #F7FFF7;
+            color: rgb(255, 234, 151);
             position: relative;
         }
-
-        h2 {
+        .header-2 {
             font-size: 2rem;
-            color: var(--header-color);
+            color: rgb(255, 237, 196);
             margin: 40px 0 20px;
             text-align: center;
             font-family: 'Comic Neue', cursive;
             position: relative;
             display: inline-block;
             padding: 0 20px;
-        }
+            border: 2px solid rgb(0, 2, 128);         /* Corrected box border */
+            box-shadow: 0 4px 8px rgba(0, 128, 0, 0.3); /* Soft green shadow */
+            border-radius: 8px;              /* Optional: rounded corners */
+            background-color: rgba(0, 0, 0, 0.1); /* Optional: subtle background */
+            background-image: url("quiz.png");
+        }        
 
-        h2::after {
+        .header-2::after {
             content: "";
             position: absolute;
             bottom: -10px;
@@ -220,7 +228,7 @@
 
         .game-link {
             text-decoration: none;
-            color: var(--header-color);
+            color: rgb(255, 179, 0);
             font-weight: 700;
             font-size: 1.3rem;
             transition: color 0.2s;
@@ -256,12 +264,13 @@
         footer {
             text-align: center;
             padding: 30px;
-            color: #6b7280;
+            color: #ffffff;
             font-size: 0.9rem;
-            background-color: var(--card-color);
+            background-color: rgb(0, 0, 0);
             border-top: 1px solid rgba(0, 0, 0, 0.05);
             margin-top: 50px;
             position: relative;
+
         }
 
         footer::before {
@@ -361,7 +370,7 @@
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Тоглоом хайх...">
         </div>
-        <h2>Тоглоомын Жагсаалт</h2>
+        <div class="header-2">Тоглоомын Жагсаалт</div>
         <div class="game-grid">
             <div class="game-card">
                 <div class="virtual-badge">Виртуал</div>
